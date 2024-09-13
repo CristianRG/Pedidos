@@ -1,4 +1,7 @@
 package com.cristian.controldepedidos.model;
+
+import androidx.annotation.NonNull;
+
 public class Customer {
     public int id;
     public String name;
@@ -53,6 +56,12 @@ public class Customer {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
 

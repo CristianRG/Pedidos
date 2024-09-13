@@ -4,13 +4,13 @@ public class Article {
     public int id;
     public Product product;
     public Customer customer;
-    public String status;
+    public int status;
     public double payment;
     public double debt;
     public double total;
 
     // Constructor
-    public Article(int id, Product product, Customer customer, String status, double payment, double debt, double total) {
+    public Article(int id, Product product, Customer customer, int status, double payment, double debt, double total) {
         this.id = id;
         this.product = product;
         this.customer = customer;
@@ -36,11 +36,11 @@ public class Article {
         this.product = product;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

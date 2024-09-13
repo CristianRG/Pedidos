@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="danger">#d70000</color>
+    <color name="success">#008b1e</color>
+    <color name="background">#ecf0f1</color>
+    <color name="backgroundDark">#bdc3c7</color>
+    <color name="item_list">#ecf0f1</color>
+    <color name="sub_item_list">#bdc3c7</color>
+    <color name="nav">#34495e</color>
+    <color name="nav_bar_color_bottom">#2c3e50</color>
+    <color name="selected">#bdc3c7</color>
+    <color name="unselected">#bdc3c7</color>
+    <color name="floatingButton">#9b59b6</color>
 </resources>

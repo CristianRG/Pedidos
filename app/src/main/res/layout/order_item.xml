@@ -1,70 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="4dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:clickable="true"
-    android:elevation="10dp">
+<layout>
 
-    <LinearLayout
+    <data>
+        <variable
+            name="order"
+            type="com.cristian.controldepedidos.model.Order" />
+    </data>
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#242526"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_marginBottom="1dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true">
 
-        <!-- Order Type -->
-        <TextView
-            android:id="@+id/order_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Order Type"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <!-- Order Status -->
-        <TextView
-            android:id="@+id/order_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Status"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
-
-        <!-- Order Total -->
-        <TextView
-            android:id="@+id/order_total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Total: $0.00"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <!-- RecyclerView for Articles (Initially Hidden) -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/articles_recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone" />
+            android:background="@color/item_list"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <!-- Toggle Button (Arrow) -->
-        <ImageView
-            android:id="@+id/expand_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/ic_expand_more"
-            android:visibility="gone" />
+            <!-- Order Type -->
 
-    </LinearLayout>
+            <!-- Order Status -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-</androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/order_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{order.type}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/order_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@{order.date}"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <!-- Order Total -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/order_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:text="@{order.status}"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:id="@+id/btnEditOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:backgroundTint="#00551414"
+                    android:src="@drawable/ic_edit" />
+
+                <ImageButton
+                    android:id="@+id/btnDetailsOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:backgroundTint="#00FFFFFF"
+                    android:src="@drawable/ic_see" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/order_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{order.totalToString}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- RecyclerView for Articles (Initially Hidden) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/articles_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <!-- Toggle Button (Arrow) -->
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

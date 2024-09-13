@@ -1,6 +1,7 @@
 package com.cristian.controldepedidos.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Order {
     public int id;
@@ -8,14 +9,16 @@ public class Order {
     public ArrayList<Article> articles;
     public String status;
     public double total;
+    public String date;
 
     // Constructor
-    public Order(int id, String type, ArrayList<Article> articles, String status, double total) {
+    public Order(int id, String type, ArrayList<Article> articles, String status, double total, String date) {
         this.id = id;
         this.type = type;
         this.articles = articles;
         this.status = status;
         this.total = total;
+        this.date = date;
     }
 
     public int getId() {
@@ -53,9 +56,20 @@ public class Order {
     public double getTotal() {
         return total;
     }
+    public String getTotalToString() {
+        return "" + total;
+    }
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
 

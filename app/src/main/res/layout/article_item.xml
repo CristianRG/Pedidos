@@ -2,14 +2,16 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="1dp"
     android:background="?android:attr/selectableItemBackground"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#3a3b3c"
+        android:layout_marginBottom="1dp"
+        android:background="@color/item_list"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -18,12 +20,12 @@
             android:id="@+id/product_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Product Name"
+            android:layout_marginBottom="4dp"
             android:clickable="true"
             android:focusable="true"
-            android:textColor="#FFFFFF"
+            android:text="Product Name"
+            android:textColor="@color/black"
             android:textSize="18sp"
-            android:layout_marginBottom="4dp"
             android:textStyle="bold" />
         <!-- Customer Name  -->
         <TextView
@@ -31,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Customer Name"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <!-- Article Status -->
@@ -41,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Status"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <!-- Payment -->
@@ -51,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Payment: $0.00"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <!-- Debt -->
@@ -61,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Debt: $0.00"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <!-- Total -->
@@ -71,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Total: $0.00"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />
 

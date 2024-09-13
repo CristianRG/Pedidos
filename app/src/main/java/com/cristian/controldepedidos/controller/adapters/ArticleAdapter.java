@@ -1,21 +1,24 @@
-package com.cristian.controldepedidos.controller;
+package com.cristian.controldepedidos.controller.adapters;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.model.Article;
+import com.cristian.controldepedidos.ui.activities.OrderDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -51,8 +54,12 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         holder.articleTotal.setText(String.format("Total: $%.2f", currentArticle.total));
 
         holder.productName.setOnClickListener(v -> {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle.product.getLink()));
-            context.startActivity(browserIntent);
+            try {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle.product.getLink()));
+                context.startActivity(browserIntent);
+            } catch (RuntimeException e){
+                Toast.makeText(this.context, "Ha ocurrido un error...", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -68,7 +75,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         public TextView articlePayment;
         public TextView articleDebt;
         public TextView articleTotal;
-
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
             productName = itemView.findViewById(R.id.product_name);

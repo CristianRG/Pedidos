@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Control de Pedidos</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_success">Confirmar</string>
+    <string name="btn_save">Guardar</string>
+    <string name="btn_add">Agregar</string>
+    <string name="title_add_order">Nuevo pedido</string>
+    <string name="title_add_article">Nuevo articulo</string>
+    <string name="title_add_customer">Nuevo cliente</string>
+    <string name="title_order_details">Detalles</string>
 </resources>

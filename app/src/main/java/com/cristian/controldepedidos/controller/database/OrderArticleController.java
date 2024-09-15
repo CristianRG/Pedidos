@@ -6,29 +6,39 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.cristian.controldepedidos.model.Article;
+import com.cristian.controldepedidos.model.ContractDB;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
+import com.cristian.controldepedidos.model.OrderArticle;
+
+import java.util.ArrayList;
 
 public class OrderArticleController {
 
-    public static void getOrderArticle(SQLiteDatabase db, Order order) throws Exception {
-        try {
-            String query = "SELECT * FROM order_article WHERE order_id = " + String.valueOf(order.getId());
-            //String query = "SELECT * FROM order_article";
-            Cursor cursor = db.rawQuery(query, null);
+    public static ArrayList<OrderArticle> getOrderArticle(SQLiteDatabase db, Order order) {
+        String selection = ContractDB.ORDER_ARTICLE_COLUMN_ORDER_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(order.getId())};
+        Cursor cursor = db.query(ContractDB.ORDER_ARTICLE_TABLE_NAME, null, selection, selectionArgs, null, null, null);
 
-            if(cursor.moveToFirst()){
-                do {
-                    Article article = ArticleController.getArticle(db, cursor.getInt(2));
-                    order.getArticles().add(article);
-                }while (cursor.moveToNext());
-            }
-        }catch (SQLException e){
-            throw new Exception("Error to get orders");
+        ArrayList<OrderArticle> orderArticles = new ArrayList<>();
+
+        if(cursor.moveToFirst()){
+            do {
+                orderArticles.add(new OrderArticle(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2)));
+            }while (cursor.moveToNext());
         }
+        return orderArticles;
     }
 
     public static long addOrderArticle(SQLiteDatabase db, long idOrder, long idArticle){
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.ORDER_ARTICLE_COLUMN_ORDER_ID, idOrder);
+        values.put(ContractDB.ORDER_ARTICLE_COLUMN_ARTICLE_ID, idArticle);
+        return db.insert(ContractDB.ORDER_ARTICLE_TABLE_NAME, null, values);
+    }
+
+    public static long addOrderArticle(DatabaseHelper dbh, long idOrder, long idArticle){
+        SQLiteDatabase db = dbh.getWritableDatabase();
         try {
             ContentValues values = new ContentValues();
             values.put("order_id", idOrder);

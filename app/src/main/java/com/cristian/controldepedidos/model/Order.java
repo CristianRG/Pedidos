@@ -1,9 +1,10 @@
 package com.cristian.controldepedidos.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Order {
+public class Order implements Serializable {
     public int id;
     public String type;
     public ArrayList<Article> articles;

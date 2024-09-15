@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.ArticleAdapter;
 import com.cristian.controldepedidos.controller.database.OrderController;
+import com.cristian.controldepedidos.controller.transactions.OrderTransaction;
 import com.cristian.controldepedidos.databinding.ActivityOrderBinding;
 import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.Customer;
@@ -60,12 +61,11 @@ public class OrderActivity extends AppCompatActivity {
         binding.totalOrder.setText(String.format("Total: $%.2f", total));
 
         binding.rvArticles.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ArticleAdapter(this, articles);
+        adapter = new ArticleAdapter(this, articles, false);
         binding.rvArticles.setAdapter(adapter);
 
         binding.btnAddArticle.setOnClickListener(view -> {
-            AddArticleDialog dialog = new AddArticleDialog(this, dbh);
-
+            AddArticleDialog dialog = new AddArticleDialog(this, dbh, null);
             dialog.setListener(new ListenerArticle() {
                 @Override
                 public void onClickConfirm(Article article) {
@@ -80,7 +80,6 @@ public class OrderActivity extends AppCompatActivity {
 
                 }
             });
-
             dialog.show();
         });
 
@@ -97,8 +96,7 @@ public class OrderActivity extends AppCompatActivity {
                 String date = localDate.format(format);
 
                 // execute query and see the response
-                boolean response = OrderController.addOrder(dbh, new Order(0, type, articles, status, total, date), this);
-
+                boolean response = OrderTransaction.addOrderTransaction(dbh, new Order(0, type, articles, status, total, date));
                 if(response){
                     finish();
                 } else {

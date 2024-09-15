@@ -2,7 +2,9 @@ package com.cristian.controldepedidos.model;
 
 import androidx.annotation.NonNull;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
     public int id;
     public String name;
     public String email;
@@ -18,6 +20,10 @@ public class Customer {
         this.status = status;
     }
 
+    public Customer() {
+
+    }
+
     public int getId() {
         return id;
     }
@@ -28,6 +34,9 @@ public class Customer {
 
     public String getName() {
         return name;
+    }
+    public String getNameString(){
+        return "Cliente: " + name;
     }
 
     public void setName(String name) {

@@ -1,6 +1,8 @@
 package com.cristian.controldepedidos.model;
 
-public class Product {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     public int id;
     public String name;
     public String link;
@@ -12,6 +14,10 @@ public class Product {
         this.name = name;
         this.link = link;
         this.price = price;
+    }
+
+    public Product() {
+
     }
 
     public int getId() {

@@ -7,60 +7,53 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.NonNull;
 
+import com.cristian.controldepedidos.model.ContractDB;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Product;
 
 public class ProductController {
 
-    public static Product getProduct(DatabaseHelper dbh){
-        SQLiteDatabase db = dbh.getWritableDatabase();
+    public static Product getProduct(SQLiteDatabase db, Product product){
+        String selection = ContractDB.PRODUCT_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(product.getId())};
+        Cursor cursor = db.query(ContractDB.PRODUCT_TABLE_NAME, null, selection, selectionArgs, null, null, null);
 
+        if(cursor.moveToFirst()){
+            product = new Product(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
+                    Double.parseDouble(String.valueOf(cursor.getString(3))));
+            return product;
+        }
         return null;
     }
 
-    public static Product getProduct(SQLiteDatabase db, long idProduct){
-        Product product;
-        try {
-            Cursor cursor = db.rawQuery(String.format("SELECT * FROM product WHERE id = %s", idProduct), null);
+    public static long addProduct(SQLiteDatabase db, Product product){
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.PRODUCT_COLUMN_LINK, product.getLink());
+        values.put(ContractDB.PRODUCT_COLUMN_NAME, product.getName());
+        values.put(ContractDB.PRODUCT_COLUMN_PRICE, product.getPrice());
+        return db.insert(ContractDB.PRODUCT_TABLE_NAME, null, values);
+    }
 
-            if(cursor.moveToFirst()){
-                 product = new Product(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                        Double.parseDouble(String.valueOf(cursor.getString(3))));
-                 return product;
-            }
-            return null;
-        }catch (SQLException e){
-            return null;
-        }
+    public static boolean deleteProduct(SQLiteDatabase db, Product product){
+        String selection = ContractDB.PRODUCT_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(product.getId())};
+
+        int count = db.delete(ContractDB.PRODUCT_TABLE_NAME, selection, selectionArgs);
+        return count == 1;
+    }
+
+    public static boolean updateProduct(SQLiteDatabase db, Product product){
+        // values from product
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.PRODUCT_COLUMN_LINK, product.getLink());
+        values.put(ContractDB.PRODUCT_COLUMN_NAME, product.getName());
+        values.put(ContractDB.PRODUCT_COLUMN_PRICE, product.getPrice());
+        String selection = ContractDB.PRODUCT_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(product.getId())};
+
+        int count = db.update(ContractDB.PRODUCT_TABLE_NAME, values, selection, selectionArgs);
+        return count == 1;
     }
 
 
-
-    public static long addProduct(@NonNull DatabaseHelper dbh, Product product){
-        SQLiteDatabase db = dbh.getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put("name", product.getName());
-            values.put("link", product.getLink());
-            values.put("price", product.getPrice());
-            long idProduct = db.insert("product", null, values);
-            db.close();
-            return idProduct;
-        } catch (SQLException e){
-            db.close();
-            return 0;
-        }
-    }
-
-    public static long addProductWithTransaction(SQLiteDatabase db, Product product){
-        try {
-            ContentValues values = new ContentValues();
-            values.put("name", product.getName());
-            values.put("link", product.getLink());
-            values.put("price", product.getPrice());
-            return db.insert("product", null, values);
-        } catch (SQLException e){
-            return 0;
-        }
-    }
 }

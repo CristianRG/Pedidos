@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.OrderAdapter;
 import com.cristian.controldepedidos.controller.database.OrderController;
+import com.cristian.controldepedidos.controller.transactions.OrderTransaction;
 import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.Customer;
 import com.cristian.controldepedidos.model.DatabaseHelper;
@@ -31,7 +32,7 @@ public class OrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private OrderAdapter orderAdapter;
     public ArrayList<Order> orderList;
-    private DatabaseHelper databaseHelper;
+    private DatabaseHelper dbh;
     private  FramentOrdersBinding binding;
 
     public OrderFragment () {
@@ -48,14 +49,14 @@ public class OrderFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        databaseHelper = new DatabaseHelper(getContext());
+        dbh = new DatabaseHelper(getContext());
         // Inicializa el RecyclerView
         recyclerView = binding.ordersRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Inicializa el ArrayList de Order
         orderList = new ArrayList<>();
-        orderList = OrderController.getOrders(databaseHelper);
+        orderList = OrderTransaction.getOrdersTransaction(dbh);
         try {
             QuickSort.quickSort(orderList, 0, orderList.size() - 1);
         } catch (ParseException e) {
@@ -63,14 +64,14 @@ public class OrderFragment extends Fragment {
         }
 
         // Configura el Adapter
-        orderAdapter = new OrderAdapter(getContext(), orderList);
+        orderAdapter = new OrderAdapter(getContext(), orderList, true);
         recyclerView.setAdapter(orderAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        orderList = OrderController.getOrders(databaseHelper);
+        orderList = OrderTransaction.getOrdersTransaction(dbh);
         try {
             QuickSort.quickSort(orderList, 0, orderList.size() - 1);
         } catch (ParseException e) {

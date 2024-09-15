@@ -4,82 +4,66 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.cristian.controldepedidos.model.Article;
+import com.cristian.controldepedidos.model.ContractDB;
 import com.cristian.controldepedidos.model.Customer;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Product;
 
 public class ArticleController {
 
-    public static Article getArticle(SQLiteDatabase db, long idArticle){
-        try {
-            Cursor cursor = db.rawQuery(String.format("SELECT * FROM article WHERE id = %s", idArticle), null);
+    public static Article getArticle(SQLiteDatabase db, Article article){
+        String selection = ContractDB.ARTICLE_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(article.getId())};
 
-            if(cursor.moveToFirst()){
-                Article article = new Article(cursor.getInt(0), null, null, cursor.getInt(1),
-                        Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)),
-                        Double.parseDouble(cursor.getString(4)));
+        Cursor cursor = db.query(ContractDB.ARTICLE_TABLE_NAME, null, selection, selectionArgs, null, null, null);
 
-                Product product = ProductController.getProduct(db, cursor.getInt(6));
-                Customer customer = CustomerController.getCustomer(db, cursor.getInt(5));
-
-                if(product==null && customer==null) return null;
-
-                article.setProduct(product);
-                article.setCustomer(customer);
-                return article;
-            }
-            return null;
-        }catch (SQLException e){
-            return null;
+        if(cursor.moveToFirst()) {
+            Product product = new Product();
+            product.setId(cursor.getInt(6));
+            Customer customer = new Customer();
+            customer.setId(cursor.getInt(5));
+            article = new Article(cursor.getInt(0), product, customer, cursor.getInt(1),
+                    Double.parseDouble(cursor.getString(2)), Double.parseDouble(cursor.getString(3)),
+                    Double.parseDouble(cursor.getString(4)));
+            return article;
         }
+        return null;
     }
 
-    public static long addArticle(DatabaseHelper dbh, Article article){
-        SQLiteDatabase db = dbh.getWritableDatabase();
-        try {
-            long idProduct = ProductController.addProduct(dbh, article.getProduct());
-            if(idProduct==0) return 0;
-            ContentValues values = new ContentValues();
-            values.put("status", article.getStatus());
-            values.put("payment", article.getPayment());
-            values.put("deb", article.getDebt());
-            values.put("total", article.getTotal());
-            values.put("customer_id", article.getCustomer().getId());
-            values.put("product_id", idProduct);
-            long idArticle = db.insert("article", null, values);
-            db.close();
-            return idArticle;
-        } catch (SQLException e){
-            db.close();
-            return 0;
-        }
+    public static long addArticle(SQLiteDatabase db, Article article){
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.ARTICLE_COLUMN_CUSTOMER_ID, article.getCustomer().getId());
+        values.put(ContractDB.ARTICLE_COLUMN_PRODUCT_ID, article.getProduct().getId());
+        values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
+        values.put(ContractDB.ARTICLE_COLUMN_PAYMENT, article.getPayment());
+        values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
+        values.put(ContractDB.ARTICLE_COLUMN_TOTAL, article.getTotal());
+        return db.insert(ContractDB.ARTICLE_TABLE_NAME, null, values);
     }
 
-    public static long addArticleWithTransaction(SQLiteDatabase db, Article article){
-        try {
-            long idProduct = ProductController.addProductWithTransaction(db, article.getProduct());
-            if (idProduct == 0) {
-                throw new SQLException("Error: No se pudo agregar el producto.");
-            }
+    public static boolean deleteArticle(SQLiteDatabase db, Article article){
+        String selection = ContractDB.ARTICLE_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(article.getId())};
 
-            ContentValues values = new ContentValues();
-            values.put("status", article.getStatus());
-            values.put("payment", article.getPayment());
-            values.put("debt", article.getDebt());
-            values.put("total", article.getTotal());
-            values.put("customer_id", article.getCustomer().getId());
-            values.put("product_id", idProduct);
+        int deletedRows = db.delete(ContractDB.ARTICLE_TABLE_NAME, selection, selectionArgs);
+        return deletedRows == 1;
+    }
 
-            long result = db.insert("article", null, values);
-            if (result == -1) {
-                throw new SQLException("Error al insertar el artículo.");
-            }
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
+    public static boolean updateArticle(SQLiteDatabase db, Article article){
+        // new values from article
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.ARTICLE_COLUMN_CUSTOMER_ID, article.getCustomer().getId());
+        //values.put(ContractDB.ARTICLE_COLUMN_PRODUCT_ID, article.getProduct().getId());
+        values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
+        values.put(ContractDB.ARTICLE_COLUMN_PAYMENT, article.getPayment());
+        values.put(ContractDB.ARTICLE_COLUMN_TOTAL, article.getTotal());
+        String selection = ContractDB.ARTICLE_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(article.getId())};
+
+        int count = db.update(ContractDB.ARTICLE_TABLE_NAME, values, selection, selectionArgs);
+        return count == 1;
     }
 }

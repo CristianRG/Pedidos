@@ -1,6 +1,8 @@
 package com.cristian.controldepedidos.model;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable {
     public int id;
     public Product product;
     public Customer customer;
@@ -18,6 +20,10 @@ public class Article {
         this.payment = payment;
         this.debt = debt;
         this.total = total;
+    }
+
+    public Article() {
+
     }
 
     public int getId() {
@@ -43,9 +49,31 @@ public class Article {
     public void setStatus(int status) {
         this.status = status;
     }
+    public String getStatusString(){
+        switch (status){
+            case 0: {
+                return "Cancelado";
+            }
+            case 1: {
+                return "Registrado";
+            }
+            case 2: {
+                return "Pedido";
+            }
+            case 3: {
+                return "Entregado";
+            }
+            default: {
+                return "Sin estado";
+            }
+        }
+    }
 
     public double getPayment() {
         return payment;
+    }
+    public String getPaymentString(){
+        return "Pagado: $" + payment;
     }
 
     public void setPayment(double payment) {
@@ -55,6 +83,9 @@ public class Article {
     public double getDebt() {
         return debt;
     }
+    public String getDebtString(){
+        return "Faltante: $" + debt;
+    }
 
     public void setDebt(double debt) {
         this.debt = debt;
@@ -62,6 +93,9 @@ public class Article {
 
     public double getTotal() {
         return total;
+    }
+    public String getTotalString() {
+        return "Total: $" + total;
     }
 
     public void setTotal(double total) {

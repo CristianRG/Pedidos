@@ -33,11 +33,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbh = new DatabaseHelper(this);
+
+        //Just for testing
         /*
-        Just for testing
         SQLiteDatabase db = dbh.getWritableDatabase();
         dbh.clearTestData(db);
+
          */
+
 
 
         if (savedInstanceState == null) {

@@ -24,10 +24,12 @@ public class AddArticleDialog extends Dialog {
     public ListenerArticle listener;
     private DatabaseHelper dbh;
     private Customer customer;
+    private Article article;
 
-    public AddArticleDialog(@NonNull Context context, DatabaseHelper databaseHelper) {
+    public AddArticleDialog(@NonNull Context context, DatabaseHelper databaseHelper, Article article) {
         super(context);
         this.dbh = databaseHelper;
+        this.article = article;
     }
 
     @Override
@@ -35,7 +37,7 @@ public class AddArticleDialog extends Dialog {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_add_article, null, false);
         setContentView(binding.getRoot());
-        getWindow().setLayout(650, 700);
+        getWindow().setLayout(680, 700);
 
         // Obtener la lista de clientes desde el controlador
         ArrayList<Customer> customers = CustomerController.getCustomers(dbh);
@@ -43,6 +45,18 @@ public class AddArticleDialog extends Dialog {
         // Crear el ArrayAdapter usando la lista de clientes
         ArrayAdapter<Customer> arrayAdapterNames = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, customers);
         binding.spinnerClient.setAdapter(arrayAdapterNames);
+
+        // set data if receive a valid article
+        if(article != null){
+            int indexSelectedCustomer = arrayAdapterNames.getPosition(article.getCustomer());
+            binding.spinnerClient.setSelection(indexSelectedCustomer);
+            binding.editTextProductName.setText(article.getProduct().getName());
+            binding.editTextProductLink.setText(article.getProduct().getLink().isEmpty() ? "" : article.getProduct().getLink());
+            binding.editTextNumberPriceProduct.setText(String.valueOf(article.getProduct().getPrice()));
+            customer = article.getCustomer();
+            binding.titleAddArticle.setText("Editar articulo");
+            binding.btnAddArticle.setText("Editar");
+        }
 
         // Configurar el Listener para el Spinner
         binding.spinnerClient.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -63,13 +77,20 @@ public class AddArticleDialog extends Dialog {
             if (!String.valueOf(binding.editTextProductName.getText()).isEmpty()
                     && !String.valueOf(binding.editTextNumberPriceProduct.getText()).isEmpty()) {
 
-                String articleName = String.valueOf(binding.editTextProductName.getText());
+                String productName = String.valueOf(binding.editTextProductName.getText());
                 String link = (binding.editTextProductLink.getText() != null) ? String.valueOf(binding.editTextProductLink.getText()) : "error";
-                Double price = Double.parseDouble(String.valueOf(binding.editTextNumberPriceProduct.getText()));
+                double price = Double.parseDouble(String.valueOf(binding.editTextNumberPriceProduct.getText()));
 
-                // Aquí usamos el cliente seleccionado en el Spinner con su ID y nombre
-                Article article = new Article(0, new Product(0, articleName, link, price),  customer,
-                        1, 0, 0, price);
+                if(this.article!=null){
+                    article.setProduct(new Product(article.getProduct().getId(), productName, link, price));
+                    article.setCustomer(customer);
+                    article.setTotal(price);
+                }
+                else{
+                    this.article = new Article(0,
+                            new Product(0, productName, link, price),  customer, 1, 0, price, price);
+                }
+
 
                 if (this.listener != null) {
                     this.listener.onClickConfirm(article);

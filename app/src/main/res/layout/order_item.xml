@@ -70,7 +70,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:backgroundTint="#00551414"
-                    android:src="@drawable/ic_edit" />
+                    android:src="@drawable/ic_edit"
+                    android:visibility="gone"
+                    />
 
                 <ImageButton
                     android:id="@+id/btnDetailsOrder"
@@ -78,7 +80,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
                     android:backgroundTint="#00FFFFFF"
-                    android:src="@drawable/ic_see" />
+                    android:src="@drawable/ic_see"
+                    android:visibility="gone"
+                    />
             </LinearLayout>
 
             <TextView

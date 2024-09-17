@@ -53,11 +53,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         Order currentOrder = orderList.get(position);
-        AtomicReference<Double> total = new AtomicReference<>((double) 0);
-        currentOrder.getArticles().forEach(article -> {
-            total.updateAndGet(v -> new Double((double) (v + article.getTotal())));
-        });
-        currentOrder.setTotal(total.get().doubleValue());
+
         holder.bind(currentOrder);
         holder.itemBinding.btnEditOrder.setVisibility(showOptions ? View.VISIBLE : View.GONE);
         holder.itemBinding.btnDetailsOrder.setVisibility(showOptions ? View.VISIBLE : View.GONE);

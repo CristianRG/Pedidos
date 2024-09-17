@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
         if (savedInstanceState == null) {
             loadFragment(new CustomerFragment());
             currentFrameID = NAV_CUSTOMERS_ID;

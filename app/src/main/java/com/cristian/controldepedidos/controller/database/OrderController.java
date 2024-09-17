@@ -45,6 +45,22 @@ public class OrderController {
     }
 
     public static boolean updateOrder(SQLiteDatabase db, Order order){
-        return true;
+        ContentValues values = new ContentValues();
+        values.put(ContractDB.ORDER_COLUMN_DATE, order.getDate());
+        values.put(ContractDB.ORDER_COLUMN_STATUS, order.getStatus());
+        values.put(ContractDB.ORDER_COLUMN_TOTAL, order.getTotal());
+        values.put(ContractDB.ORDER_COLUMN_TYPE, order.getType());
+
+        String selection = ContractDB.ORDER_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(order.getId())};
+        int count = db.update(ContractDB.ORDER_TABLE_NAME, values, selection, selectionArgs);
+        return count == 1;
+    }
+
+    public static boolean deleteOrder(SQLiteDatabase db, Order order){
+        String selection = ContractDB.ORDER_COLUMN_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(order.getId())};
+        int count = db.delete(ContractDB.ORDER_TABLE_NAME, selection, selectionArgs);
+        return count == 1;
     }
 }

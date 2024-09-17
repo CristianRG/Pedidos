@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.ContractDB;
@@ -37,15 +38,11 @@ public class OrderArticleController {
         return db.insert(ContractDB.ORDER_ARTICLE_TABLE_NAME, null, values);
     }
 
-    public static long addOrderArticle(DatabaseHelper dbh, long idOrder, long idArticle){
-        SQLiteDatabase db = dbh.getWritableDatabase();
-        try {
-            ContentValues values = new ContentValues();
-            values.put("order_id", idOrder);
-            values.put("article_id", idArticle);
-            return db.insert("order_article", null, values);
-        }catch (SQLException e){
-            return 0;
-        }
+    public static boolean deleteOrderArticle(SQLiteDatabase db, long idOrder, long idArticle){
+        String selection = ContractDB.ORDER_ARTICLE_COLUMN_ORDER_ID + "= ? and " + ContractDB.ORDER_ARTICLE_COLUMN_ARTICLE_ID + "= ?";
+        String[] selectionArgs = {String.valueOf(idOrder), String.valueOf(idArticle)};
+        int count = db.delete(ContractDB.ORDER_ARTICLE_TABLE_NAME, selection, selectionArgs);
+        Log.d("debug", "order: " + idOrder + "article: " + idArticle + count);
+        return count > 0;
     }
 }

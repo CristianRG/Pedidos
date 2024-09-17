@@ -60,11 +60,13 @@ public class ArticleTransaction {
                 if (!count)throw new SQLException("Not deleted");
                 boolean productCount = ProductController.deleteProduct(db, article.getProduct());
                 if(!productCount)throw new SQLException("Not deleted");
+                //boolean orderArticleCount = OrderArticleController.deleteOrderArticle(db, order.getId(), article.getId());
+                //if(!orderArticleCount)throw new SQLException("Not orderArticle deleted");
             }
             response = true;
         }
         catch (SQLException e){
-            Log.d("Error", Objects.requireNonNull(e.getMessage()));
+            Log.d("debug", Objects.requireNonNull(e.getMessage()));
         }
         return response;
     }

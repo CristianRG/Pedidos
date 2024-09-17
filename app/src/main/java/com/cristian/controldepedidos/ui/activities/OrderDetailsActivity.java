@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.ArticleAdapter;
+import com.cristian.controldepedidos.controller.database.OrderArticleController;
 import com.cristian.controldepedidos.controller.database.OrderController;
 import com.cristian.controldepedidos.controller.transactions.ArticleTransaction;
 import com.cristian.controldepedidos.databinding.ActivityOrderDetailsBinding;
@@ -95,7 +96,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
             dialog.show();
         });
-        // listeners from articleAdapter
+        // TODO: Listener from adapter. onConfirmEdit and onDeleteItem
         articleAdapter.setListener(new ArticleAdapter.ArticleListener() {
             @Override
             public void onConfirmEdit(Article article, int position) {
@@ -145,51 +146,68 @@ public class OrderDetailsActivity extends AppCompatActivity {
         });
         // confirm edit
         binding.btnConfirmEdit.setOnClickListener(view -> {
+            // TODO: Get response. If user accept to save data so save changes. Otherwise not save anything
             // nothing change
-            if(addedArticles.size() == 0 && modifiedArticles.size() == 0 && deletedArticles.size() == 0){
-                finish();
+            //if(addedArticles.size() == 0 && modifiedArticles.size() == 0 && deletedArticles.size() == 0){finish();}
+            db = dbh.getWritableDatabase();
+            db.beginTransaction();
+            // update general data from order
+            // new articles added
+            if(addedArticles.size() != 0){
+                try {
+                    addArticles();
+                }catch (SQLException e){
+                    Toast.makeText(this, "Error to insert...", Toast.LENGTH_SHORT).show();
+                    db.endTransaction();
+                    return;
+                }
             }
-            boolean response = saveItems();
-            if(response){
-                db = dbh.getWritableDatabase();
-                db.beginTransaction();
-                // update general data from order
-                // new articles added
-                if(addedArticles.size() != 0){
-                    try {
-                        addArticles();
-                    }catch (SQLException e){
-                        Toast.makeText(this, "Error to insert...", Toast.LENGTH_SHORT).show();
-                        db.endTransaction();
-                        return;
-                    }
+            // modified
+            if(modifiedArticles.size() != 0){
+                try {
+                    modifiedArticles();
+                }catch (SQLException e){
+                    Toast.makeText(this, "Error to update...", Toast.LENGTH_SHORT).show();
+                    db.endTransaction();
+                    return;
                 }
-                // modified
-                if(modifiedArticles.size() != 0){
-                    try {
-                        modifiedArticles();
-                    }catch (SQLException e){
-                        Toast.makeText(this, "Error to update...", Toast.LENGTH_SHORT).show();
-                        db.endTransaction();
-                        return;
-                    }
+            }
+            // deleted
+            if(deletedArticles.size() != 0){
+                try {
+                    deletedArticles();
+                }catch (SQLException e){
+                    Toast.makeText(this, "Error to delete...", Toast.LENGTH_SHORT).show();
+                    db.endTransaction();
+                    return;
                 }
-                // deleted
-                if(deletedArticles.size() != 0){
-                    try {
-                        deletedArticles();
-                    }catch (SQLException e){
-                        Toast.makeText(this, "Error to delete...", Toast.LENGTH_SHORT).show();
-                        db.endTransaction();
-                        return;
-                    }
+            }
+            // TODO: In case than order is empty delete order
+            if(articleAdapter.getArticleList().isEmpty()){
+                boolean deleted = OrderController.deleteOrder(db, order);
+                if(!deleted){
+                    db.endTransaction();
+                    db.close();
+                    return;
                 }
                 db.setTransactionSuccessful();
                 db.endTransaction();
                 db.close();
                 finish();
+                return;
             }
-            finish();
+
+            // TODO: Set properties in case the order not is empty
+            order.setTotal(Double.parseDouble(String.valueOf(binding.totalOrder.getText())));
+            order.setStatus(binding.spinnerStatusOrderDetails.getSelectedItem().toString());
+            order.setType(binding.spinnerTypeOrderDetails.getSelectedItem().toString());
+            boolean updated = OrderController.updateOrder(db, order);
+            if(updated){
+                db.setTransactionSuccessful();
+                db.endTransaction();
+                db.close();
+                finish();
+            }
         });
         binding.btnCancelOrder.setOnClickListener(view -> {
             if (addedArticles.size() != 0 || modifiedArticles.size() != 0 || deletedArticles.size() != 0){
@@ -234,22 +252,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
             total += article.getTotal();
         }
         return total;
-    }
-
-    private boolean saveItems(){
-        final boolean[] response = {false};
-        new AlertDialog.Builder(this)
-                .setTitle("¿Deseas guardar?")
-                .setPositiveButton("Guardar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        response[0] = true;
-                    }
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
-
-        return  response[0];
     }
 
     @Override

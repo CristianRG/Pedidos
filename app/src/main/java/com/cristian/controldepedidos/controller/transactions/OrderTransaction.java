@@ -2,6 +2,8 @@ package com.cristian.controldepedidos.controller.transactions;
 
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import com.cristian.controldepedidos.controller.database.ArticleController;
 import com.cristian.controldepedidos.controller.database.CustomerController;

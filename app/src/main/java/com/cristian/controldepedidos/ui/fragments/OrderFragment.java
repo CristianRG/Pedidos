@@ -50,7 +50,6 @@ public class OrderFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         dbh = new DatabaseHelper(getContext());
-        // Inicializa el RecyclerView
         recyclerView = binding.ordersRecyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

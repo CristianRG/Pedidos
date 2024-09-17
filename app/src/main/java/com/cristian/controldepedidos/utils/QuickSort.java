@@ -26,7 +26,8 @@ public class QuickSort {
         for (int i = left; i < right; i++){
             Date temp = format.parse(orders.get(i).getDate());
 
-            if(temp.before(pivot)){
+            assert temp != null;
+            if(temp.after(pivot)){
 
                 Order swapTemp = orders.get(index);
                 // intercambio

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -41,37 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         */
 
-
-
-
-
         if (savedInstanceState == null) {
             loadFragment(new CustomerFragment());
             currentFrameID = NAV_CUSTOMERS_ID;
         }
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                fragment = null;
-
-                if(item.getItemId() == R.id.nav_clientes){
-                    fragment = new CustomerFragment();
-                    currentFrameID = NAV_CUSTOMERS_ID;
-                } else if (item.getItemId() == R.id.nav_pedidos) {
-                    fragment = new OrderFragment();
-                    currentFrameID = NAV_ORDERS_ID;
-                } else if (item.getItemId() == R.id.nav_historial) {
-                    fragment = new HistoryFragment();
-                    currentFrameID = NAV_HISTORY_ID;
-                }
-
-                loadFragment(fragment);
-                return true;
-            }
-        });
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             if(currentFrameID.equals(NAV_CUSTOMERS_ID)){
@@ -95,6 +69,30 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "NO ACTION SELECTED!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            fragment = null;
+
+            if(item.getItemId() == R.id.nav_clientes){
+                fragment = new CustomerFragment();
+                currentFrameID = NAV_CUSTOMERS_ID;
+                fab.setVisibility(View.VISIBLE);
+            } else if (item.getItemId() == R.id.nav_pedidos) {
+                fragment = new OrderFragment();
+                currentFrameID = NAV_ORDERS_ID;
+                fab.setVisibility(View.VISIBLE);
+            } else if (item.getItemId() == R.id.nav_historial) {
+                fragment = new HistoryFragment();
+                currentFrameID = NAV_HISTORY_ID;
+                fab.setVisibility(View.GONE);
+            }
+
+            loadFragment(fragment);
+            return true;
+        });
+
+
     }
 
     private void loadFragment(Fragment fragment) {

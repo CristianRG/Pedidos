@@ -118,5 +118,9 @@ public class Article implements Serializable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    public static String[] getStatusList(){
+        return new String[]{"Cancelado", "Registrado", "Pedido", "Entregado", "Pagado"};
+    }
 }
 

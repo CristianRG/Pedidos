@@ -16,4 +16,5 @@
     <string name="pay">Abonar</string>
     <string name="amount">Cantidad:</string>
     <string name="turn_on">Reactivar</string>
+    <string name="price">Precio: $</string>
 </resources>

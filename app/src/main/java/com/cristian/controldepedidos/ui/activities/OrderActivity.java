@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,14 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.ArticleAdapter;
-import com.cristian.controldepedidos.controller.database.OrderController;
 import com.cristian.controldepedidos.controller.transactions.OrderTransaction;
 import com.cristian.controldepedidos.databinding.ActivityOrderBinding;
 import com.cristian.controldepedidos.model.Article;
-import com.cristian.controldepedidos.model.Customer;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
-import com.cristian.controldepedidos.model.Product;
 import com.cristian.controldepedidos.ui.dialogs.AddArticleDialog;
 import com.cristian.controldepedidos.ui.dialogs.ListenerArticle;
 
@@ -76,7 +72,7 @@ public class OrderActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onClickCancel(Button button) {
+                public void onClickCancel() {
 
                 }
             });

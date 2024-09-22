@@ -1,24 +1,19 @@
 package com.cristian.controldepedidos.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.ArticleAdapter;
-import com.cristian.controldepedidos.controller.database.OrderArticleController;
 import com.cristian.controldepedidos.controller.database.OrderController;
 import com.cristian.controldepedidos.controller.transactions.ArticleTransaction;
 import com.cristian.controldepedidos.databinding.ActivityOrderDetailsBinding;
@@ -27,7 +22,7 @@ import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
 import com.cristian.controldepedidos.ui.dialogs.AddArticleDialog;
 import com.cristian.controldepedidos.ui.dialogs.ListenerArticle;
-
+import com.cristian.controldepedidos.utils.UtilMethods;
 import java.util.ArrayList;
 
 public class OrderDetailsActivity extends AppCompatActivity {
@@ -47,7 +42,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
         dbh = new DatabaseHelper(this);
         Intent intent = getIntent();
         order = (Order) intent.getSerializableExtra("order");
-
+        // Set properties to recyclerView
         if (order != null) {
             articleAdapter = new ArticleAdapter(this, order.getArticles(), true, dbh);
             binding.rvArticles.setLayoutManager(new LinearLayoutManager(this));
@@ -56,25 +51,24 @@ public class OrderDetailsActivity extends AppCompatActivity {
         else {
             throw new RuntimeException("Error to load object");
         }
+        // TODO: Set properties just if order not is null
         String[] types = {"Shein", "Mercado Libre", "Avon", "Otro"};
         ArrayAdapter<String> orderTypes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, types);
         binding.spinnerTypeOrderDetails.setAdapter(orderTypes);
         int indexSelectedType = orderTypes.getPosition(order.getType());
         binding.spinnerTypeOrderDetails.setSelection(indexSelectedType);
-
-        String[] statusList = {"Cancelado","Registrado","Entregado","Pagado"};
+        String[] statusList = Order.getListStatus();
         ArrayAdapter<String> statusListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, statusList);
         binding.spinnerStatusOrderDetails.setAdapter(statusListAdapter);
         int indexSelectedStatus = statusListAdapter.getPosition(order.getStatus());
         binding.spinnerStatusOrderDetails.setSelection(indexSelectedStatus);
-
         binding.totalOrder.setText(order.getTotalToString());
-
+        // lists of articles - articles added / modified / deleted
         addedArticles = new ArrayList<>();
         modifiedArticles = new ArrayList<>();
         deletedArticles = new ArrayList<>();
 
-        // button to add new articles
+        // TODO: listener from button to add a new article to list
         binding.btnAddArticleDetails.setOnClickListener(view -> {
             AddArticleDialog dialog = new AddArticleDialog(this, dbh, null);
             dialog.setListener(new ListenerArticle() {
@@ -84,14 +78,11 @@ public class OrderDetailsActivity extends AppCompatActivity {
                     order.getArticles().add(article);
                     articleAdapter.updateData(order.getArticles());
                     articleAdapter.notifyItemInserted(order.getArticles().size() - 1);
-                    order.setTotal(calculateTotal(order.getArticles()));
+                    order.setTotal(UtilMethods.calculateTotal(order.getArticles()));
                     binding.totalOrder.setText(order.getTotalToString());
                 }
-
                 @Override
-                public void onClickCancel(Button button) {
-
-                }
+                public void onClickCancel() {}
             });
 
             dialog.show();
@@ -118,7 +109,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
 
                 articleAdapter.notifyItemChanged(position);
                 order.setArticles(articleAdapter.getArticleList());
-                order.setTotal(calculateTotal(order.getArticles()));
+                order.setTotal(UtilMethods.calculateTotal(order.getArticles()));
                 binding.totalOrder.setText(order.getTotalToString());
             }
 
@@ -140,13 +131,14 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 articleAdapter.notifyItemRemoved(position);
                 articleAdapter.notifyItemRangeChanged(position, articleAdapter.getItemCount());
                 order.setArticles(articleAdapter.getArticleList());
-                order.setTotal(calculateTotal(order.getArticles()));
+                order.setTotal(UtilMethods.calculateTotal(order.getArticles()));
                 binding.totalOrder.setText(order.getTotalToString());
             }
         });
+        // TODO: Listener from confirmEditButton and cancelEditButton
         // confirm edit
         binding.btnConfirmEdit.setOnClickListener(view -> {
-            // TODO: Get response. If user accept to save data so save changes. Otherwise not save anything
+            // TODO: start transaction saving, updating and deleting articles
             // nothing change
             //if(addedArticles.size() == 0 && modifiedArticles.size() == 0 && deletedArticles.size() == 0){finish();}
             db = dbh.getWritableDatabase();
@@ -214,12 +206,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
                 new AlertDialog.Builder(this)
                         .setTitle("¿Salir sin guardar?")
                         .setMessage("Si sales los cambios no serán aplicados")
-                        .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                finish();
-                            }
-                        })
+                        .setPositiveButton("Salir", (dialogInterface, i) -> finish())
                         .setNegativeButton("Continuar", null)
                         .show();
             }
@@ -232,7 +219,6 @@ public class OrderDetailsActivity extends AppCompatActivity {
         boolean response = ArticleTransaction.addArticleTransaction(db, orderAddedArticles);
         if(!response)throw new SQLException("Not articles added");
     }
-
     private void modifiedArticles(){
         Order orderModifiedArticles = order;
         orderModifiedArticles.setArticles(modifiedArticles);
@@ -245,27 +231,13 @@ public class OrderDetailsActivity extends AppCompatActivity {
         boolean response = ArticleTransaction.deleteArticleTransaction(db, orderDeletedArticles);
         if(!response)throw new SQLException("Not deleted");
     }
-    private double calculateTotal(ArrayList<Article> articles){
-        double total = 0;
-        for (Article article:
-             articles) {
-            total += article.getTotal();
-        }
-        return total;
-    }
-
     @Override
     public void onBackPressed() {
         if (addedArticles.size() != 0 || modifiedArticles.size() != 0 || deletedArticles.size() != 0){
             new AlertDialog.Builder(this)
                     .setTitle("¿Salir sin guardar?")
                     .setMessage("Si sales los cambios no serán aplicados")
-                    .setPositiveButton("Salir", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            finish();
-                        }
-                    })
+                    .setPositiveButton("Salir", (dialogInterface, i) -> finish())
                     .setNegativeButton("Continuar", null)
                     .show();
         }

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.model.Order;
+import com.cristian.controldepedidos.ui.activities.OrderAnalyticsActivity;
 import com.cristian.controldepedidos.ui.activities.OrderDetailsActivity;
 
 import java.util.ArrayList;
@@ -78,6 +79,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 Intent detailsActivity = new Intent(context, OrderDetailsActivity.class);
                 detailsActivity.putExtra("order", currentOrder);
                 context.startActivity(detailsActivity);
+            }catch (RuntimeException e){
+                Toast.makeText(this.context, "Ha ocurrido un error...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.itemBinding.btnDetailsOrder.setOnClickListener(view -> {
+            try {
+                Intent orderAnalyticsActivity = new Intent(context, OrderAnalyticsActivity.class);
+                orderAnalyticsActivity.putExtra("order", currentOrder);
+                context.startActivity(orderAnalyticsActivity);
             }catch (RuntimeException e){
                 Toast.makeText(this.context, "Ha ocurrido un error...", Toast.LENGTH_SHORT).show();
             }

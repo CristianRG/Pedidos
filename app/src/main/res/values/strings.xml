@@ -8,4 +8,12 @@
     <string name="title_add_article">Nuevo articulo</string>
     <string name="title_add_customer">Nuevo cliente</string>
     <string name="title_order_details">Detalles</string>
+    <string name="title_pay_article">Pagar</string>
+    <string name="status">Estado:</string>
+    <string name="payed">Pagado: $</string>
+    <string name="debt">Pendiente: $</string>
+    <string name="total">Total: $</string>
+    <string name="pay">Abonar</string>
+    <string name="amount">Cantidad:</string>
+    <string name="turn_on">Reactivar</string>
 </resources>

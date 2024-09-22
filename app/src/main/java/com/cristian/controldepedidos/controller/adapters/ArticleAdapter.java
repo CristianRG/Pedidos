@@ -11,9 +11,6 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -92,7 +89,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
                 }
 
                 @Override
-                public void onClickCancel(Button button) {
+                public void onClickCancel() {
                     dialog.dismiss();
                 }
             });

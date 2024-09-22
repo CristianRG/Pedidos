@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         dbh = new DatabaseHelper(this);
 
         //Just for testing
-        /*
-        SQLiteDatabase db = dbh.getWritableDatabase();
+        
+       /* SQLiteDatabase db = dbh.getWritableDatabase();
         dbh.clearTestData(db);
 
-         */
+        */
 
 
 

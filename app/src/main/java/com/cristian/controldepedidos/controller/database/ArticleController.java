@@ -2,14 +2,12 @@ package com.cristian.controldepedidos.controller.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.ContractDB;
 import com.cristian.controldepedidos.model.Customer;
-import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Product;
 
 public class ArticleController {
@@ -39,8 +37,8 @@ public class ArticleController {
         values.put(ContractDB.ARTICLE_COLUMN_PRODUCT_ID, article.getProduct().getId());
         values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
         values.put(ContractDB.ARTICLE_COLUMN_PAYMENT, article.getPayment());
-        values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
         values.put(ContractDB.ARTICLE_COLUMN_TOTAL, article.getTotal());
+        values.put(ContractDB.ARTICLE_COLUMN_STATUS, article.getStatus());
         return db.insert(ContractDB.ARTICLE_TABLE_NAME, null, values);
     }
 
@@ -58,6 +56,7 @@ public class ArticleController {
         values.put(ContractDB.ARTICLE_COLUMN_CUSTOMER_ID, article.getCustomer().getId());
         //values.put(ContractDB.ARTICLE_COLUMN_PRODUCT_ID, article.getProduct().getId());
         values.put(ContractDB.ARTICLE_COLUMN_DEBT, article.getDebt());
+        values.put(ContractDB.ARTICLE_COLUMN_STATUS, article.getStatus());
         values.put(ContractDB.ARTICLE_COLUMN_PAYMENT, article.getPayment());
         values.put(ContractDB.ARTICLE_COLUMN_TOTAL, article.getTotal());
         String selection = ContractDB.ARTICLE_COLUMN_ID + "= ?";

@@ -3,6 +3,7 @@ package com.cristian.controldepedidos.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Order implements Serializable {
     public int id;
@@ -11,6 +12,12 @@ public class Order implements Serializable {
     public String status;
     public double total;
     public String date;
+    public static final String STATUS_CANCELLED = "Cancelado";
+    public static final String STATUS_REGISTERED = "Registrado";
+    public static final String STATUS_ORDERED = "Pedido";
+    public static final String STATUS_DELIVERED = "Entregado";
+    public static final String STATUS_PAYED = "Pagado";
+    public static final String STATUS_NOTHING = "Sin estado";
 
     // Constructor
     public Order(int id, String type, ArrayList<Article> articles, String status, double total, String date) {
@@ -20,6 +27,10 @@ public class Order implements Serializable {
         this.status = status;
         this.total = total;
         this.date = date;
+    }
+
+    public Order() {
+
     }
 
     public int getId() {
@@ -71,6 +82,9 @@ public class Order implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public static String[] getListStatus(){
+        return new String[]{STATUS_CANCELLED, STATUS_REGISTERED, STATUS_ORDERED, STATUS_DELIVERED, STATUS_PAYED, STATUS_NOTHING};
     }
 }
 

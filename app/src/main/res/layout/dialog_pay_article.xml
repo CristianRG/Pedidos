@@ -4,7 +4,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:elevation="10dp">
@@ -12,33 +12,42 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/titleAddArticle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/nav"
                 android:padding="10dp"
-                android:text="@string/title_add_article"
+                android:text="@string/title_pay_article"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/textView3"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Cliente:"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinnerClient"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="Cliente:"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="customer name"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView5"
@@ -55,47 +64,42 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView7"
-                    android:layout_width="10dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Producto"
-                    android:textColor="@color/black" />
-
-                <EditText
-                    android:id="@+id/editTextProductName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:padding="8dp" />
+                    android:layout_weight="0"
+                    android:text="Producto: "
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/txtProductName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Producto"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:padding="8dp">
+                android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/debt"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/txtDebtProduct"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Link (Opcional)"
+                    android:text="0"
                     android:textColor="@color/black" />
-
-                <EditText
-                    android:id="@+id/editTextProductLink"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:padding="8dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -106,20 +110,44 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/total"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/txtPriceProduct"
                     android:layout_width="10dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Precio $"
+                    android:text="0"
+                    android:textColor="@color/black" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/amount"
                     android:textColor="@color/black" />
 
                 <EditText
-                    android:id="@+id/editTextNumberPriceProduct"
+                    android:id="@+id/editTextAmountToPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
                     android:inputType="numberDecimal" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -131,7 +159,7 @@
                 android:paddingLeft="5dp">
 
                 <Button
-                    android:id="@+id/btnCancel"
+                    android:id="@+id/btnCancelPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0"
@@ -139,13 +167,13 @@
                     android:text="@string/btn_cancel" />
 
                 <Button
-                    android:id="@+id/btnAddArticle"
+                    android:id="@+id/btnConfirmPay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="0"
                     android:backgroundTint="@color/success"
-                    android:text="@string/btn_add" />
+                    android:text="@string/pay" />
 
             </LinearLayout>
 

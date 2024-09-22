@@ -18,6 +18,7 @@ import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Product;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AddArticleDialog extends Dialog {
     private DialogAddArticleBinding binding;
@@ -37,7 +38,7 @@ public class AddArticleDialog extends Dialog {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.dialog_add_article, null, false);
         setContentView(binding.getRoot());
-        getWindow().setLayout(680, 700);
+        Objects.requireNonNull(getWindow()).setLayout(680, 700);
 
         // Obtener la lista de clientes desde el controlador
         ArrayList<Customer> customers = CustomerController.getCustomers(dbh);
@@ -87,8 +88,7 @@ public class AddArticleDialog extends Dialog {
                     article.setTotal(price);
                 }
                 else{
-                    this.article = new Article(0,
-                            new Product(0, productName, link, price),  customer, 1, 0, price, price);
+                    this.article = new Article(0, new Product(0, productName, link, price),  customer, 1, 0, price, price);
                 }
 
 
@@ -102,7 +102,7 @@ public class AddArticleDialog extends Dialog {
         // Configurar el botón de cancelar
         binding.btnCancel.setOnClickListener(view -> {
             if (this.listener != null) {
-                this.listener.onClickCancel(binding.btnCancel);
+                this.listener.onClickCancel();
             }
             dismiss();
         });

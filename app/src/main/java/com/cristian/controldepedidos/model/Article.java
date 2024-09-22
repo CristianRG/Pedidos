@@ -10,6 +10,12 @@ public class Article implements Serializable {
     public double payment;
     public double debt;
     public double total;
+    public static final int STATUS_CANCELLED = 0;
+    public static final int STATUS_REGISTERED = 1;
+    public static final int STATUS_ORDERED = 2;
+    public static final int STATUS_DELIVERED = 3;
+    public static final int STATUS_PAYED = 4;
+    public static final int STATUS_NOTHING = 5;
 
     // Constructor
     public Article(int id, Product product, Customer customer, int status, double payment, double debt, double total) {
@@ -51,17 +57,20 @@ public class Article implements Serializable {
     }
     public String getStatusString(){
         switch (status){
-            case 0: {
+            case STATUS_CANCELLED: {
                 return "Cancelado";
             }
-            case 1: {
+            case STATUS_REGISTERED: {
                 return "Registrado";
             }
-            case 2: {
+            case STATUS_ORDERED: {
                 return "Pedido";
             }
-            case 3: {
+            case STATUS_DELIVERED: {
                 return "Entregado";
+            }
+            case STATUS_PAYED: {
+                return "Pagado";
             }
             default: {
                 return "Sin estado";
@@ -73,7 +82,7 @@ public class Article implements Serializable {
         return payment;
     }
     public String getPaymentString(){
-        return "Pagado: $" + payment;
+        return "" + payment;
     }
 
     public void setPayment(double payment) {
@@ -84,7 +93,7 @@ public class Article implements Serializable {
         return debt;
     }
     public String getDebtString(){
-        return "Faltante: $" + debt;
+        return "" + debt;
     }
 
     public void setDebt(double debt) {
@@ -95,7 +104,7 @@ public class Article implements Serializable {
         return total;
     }
     public String getTotalString() {
-        return "Total: $" + total;
+        return "" + total;
     }
 
     public void setTotal(double total) {

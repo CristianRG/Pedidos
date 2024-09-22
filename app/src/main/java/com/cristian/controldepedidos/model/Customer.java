@@ -3,6 +3,7 @@ package com.cristian.controldepedidos.model;
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Customer implements Serializable {
     public int id;
@@ -71,6 +72,19 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return id == customer.id;  // Compara por el ID del cliente
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);  // Usa el ID para calcular el hash
     }
 }
 

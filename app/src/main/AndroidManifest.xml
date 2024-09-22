@@ -24,6 +24,7 @@
         <activity android:name="com.cristian.controldepedidos.ui.activities.OrderActivity" />
         <activity android:name="com.cristian.controldepedidos.ui.activities.CustomerActivity"/>
         <activity android:name="com.cristian.controldepedidos.ui.activities.OrderDetailsActivity"/>
+        <activity android:name="com.cristian.controldepedidos.ui.activities.OrderAnalyticsActivity" />
     </application>
 
 </manifest>

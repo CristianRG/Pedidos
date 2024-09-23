@@ -6,11 +6,14 @@ import android.util.Log;
 
 import com.cristian.controldepedidos.controller.database.ArticleController;
 import com.cristian.controldepedidos.controller.database.CustomerController;
+import com.cristian.controldepedidos.controller.database.HistoryController;
 import com.cristian.controldepedidos.controller.database.OrderArticleController;
 import com.cristian.controldepedidos.controller.database.ProductController;
 import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
+import com.cristian.controldepedidos.model.Transaction;
+import com.cristian.controldepedidos.utils.UtilMethods;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -29,6 +32,8 @@ public class ArticleTransaction {
 
                 long orderArticleId = OrderArticleController.addOrderArticle(db, order.getId(), articleId);
                 if(orderArticleId == -1)throw new SQLException("Not relationship established");
+                String details = "Articulo agregado: " + article.getProduct().getName() + "\nCliente: " + article.getCustomer().getName();
+                HistoryController.addHistory(db, new Transaction(0, Transaction.TYPE_ADDED, details, UtilMethods.getCurrentDate()));
             }
             response = true;
         }catch (SQLException e){
@@ -44,6 +49,8 @@ public class ArticleTransaction {
                 if (!count)throw new SQLException("Not updated article");
                 boolean productCount = ProductController.updateProduct(db, article.getProduct());
                 if(!productCount)throw new SQLException("Not updated product");
+                String details = "Articulo editado: " + article.getProduct().getName() + "\nCliente: " + article.getCustomer().getName();
+                HistoryController.addHistory(db, new Transaction(0, Transaction.TYPE_EDITED, details, UtilMethods.getCurrentDate()));
             }
             response = true;
         }
@@ -60,6 +67,8 @@ public class ArticleTransaction {
                 if (!count)throw new SQLException("Not deleted");
                 boolean productCount = ProductController.deleteProduct(db, article.getProduct());
                 if(!productCount)throw new SQLException("Not deleted");
+                String details = "Articulo eliminado: " + article.getProduct().getName() + "\nCliente: " + article.getCustomer().getName();
+                HistoryController.addHistory(db, new Transaction(0, Transaction.TYPE_REMOVED, details, UtilMethods.getCurrentDate()));
                 //boolean orderArticleCount = OrderArticleController.deleteOrderArticle(db, order.getId(), article.getId());
                 //if(!orderArticleCount)throw new SQLException("Not orderArticle deleted");
             }

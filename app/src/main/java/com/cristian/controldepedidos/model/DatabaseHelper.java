@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "orders.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -28,17 +28,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String ORDER_ARTICLE = "CREATE TABLE order_article (id INTEGER PRIMARY KEY AUTOINCREMENT, order_id INTEGER, article_id INTEGER, " +
                 "FOREIGN KEY(order_id) REFERENCES orders(id)  ON DELETE CASCADE ON UPDATE CASCADE, " +
                 "FOREIGN KEY(article_id) REFERENCES article(id)  ON DELETE CASCADE ON UPDATE CASCADE)";
+        String TRANSACTION_TABLE = "CREATE TABLE history (id INTEGER PRIMARY KEY AUTOINCREMENT, type INTEGER NOT NULL, details TEXT, date TEXT NOT NULL)";
         db.execSQL(CUSTOMER_TABLE);
         db.execSQL(PRODUCT_TABLE);
         db.execSQL(ARTICLE_TABLE);
         db.execSQL(ORDER_TABLE);
         db.execSQL(ORDER_ARTICLE);
+        db.execSQL(TRANSACTION_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Actualizar la base de datos si es necesario
-        db.execSQL("DROP TABLE IF EXISTS pedidos");
+        clearTestData(db);
         onCreate(db);
     }
 
@@ -49,14 +51,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void clearTestData(SQLiteDatabase db) {
-        db.execSQL("DELETE FROM customer");
-        db.execSQL("DELETE FROM product");
-        db.execSQL("DELETE FROM article");
-        db.execSQL("DELETE FROM orders");
-        db.execSQL("DELETE FROM order_article");
+        db.execSQL("DROP TABLE IF EXISTS customer");
+        db.execSQL("DROP TABLE IF EXISTS product");
+        db.execSQL("DROP TABLE IF EXISTS article");
+        db.execSQL("DROP TABLE IF EXISTS orders");
+        db.execSQL("DROP TABLE IF EXISTS order_article");
+        db.execSQL("DROP TABLE IF EXISTS history");
 
         // Opcional: Restablece el contador de AUTOINCREMENT
-        db.execSQL("VACUUM;");
     }
 
 }

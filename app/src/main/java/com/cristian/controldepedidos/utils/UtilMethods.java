@@ -6,6 +6,8 @@ import com.cristian.controldepedidos.model.Article;
 import com.cristian.controldepedidos.model.Customer;
 import com.cristian.controldepedidos.model.Order;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -79,5 +81,21 @@ public class UtilMethods {
         message.append("\n*Total $").append(order.getTotal()).append("*");
 
         return message;
+    }
+
+    public static String getCurrentDate(){
+        DateTimeFormatter format = null;
+        String date = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        }
+        LocalDate localDate = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            localDate = LocalDate.now();
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            date = localDate.format(format);
+        }
+        return date;
     }
 }

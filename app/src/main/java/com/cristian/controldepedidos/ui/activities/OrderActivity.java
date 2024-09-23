@@ -22,6 +22,7 @@ import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
 import com.cristian.controldepedidos.ui.dialogs.AddArticleDialog;
 import com.cristian.controldepedidos.ui.dialogs.ListenerArticle;
+import com.cristian.controldepedidos.utils.UtilMethods;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -85,11 +86,7 @@ public class OrderActivity extends AppCompatActivity {
                 // get data
                 String type = binding.spinnerTypeOrder.getSelectedItem().toString();
                 String status = binding.spinnerStatusOrder.getSelectedItem().toString();
-
-                // format date to make the order
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate localDate = LocalDate.now();
-                String date = localDate.format(format);
+                String date = UtilMethods.getCurrentDate();
 
                 // execute query and see the response
                 boolean response = OrderTransaction.addOrderTransaction(dbh, new Order(0, type, articles, status, total, date));

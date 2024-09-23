@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import com.cristian.controldepedidos.controller.database.ArticleController;
 import com.cristian.controldepedidos.controller.database.CustomerController;
+import com.cristian.controldepedidos.controller.database.HistoryController;
 import com.cristian.controldepedidos.controller.database.OrderArticleController;
 import com.cristian.controldepedidos.controller.database.OrderController;
 import com.cristian.controldepedidos.controller.database.ProductController;
@@ -16,6 +17,9 @@ import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
 import com.cristian.controldepedidos.model.OrderArticle;
 import com.cristian.controldepedidos.model.Product;
+import com.cristian.controldepedidos.model.Transaction;
+import com.cristian.controldepedidos.utils.UtilMethods;
+
 import java.util.ArrayList;
 
 public class OrderTransaction {
@@ -69,6 +73,8 @@ public class OrderTransaction {
 
                 long orderArticleId = OrderArticleController.addOrderArticle(db, orderId, articleId);
                 if(orderArticleId == -1)throw new SQLException("Not relationship established");
+                String details = "Articulo agregado: " + article.getProduct().getName() + "\nCliente: " + article.getCustomer().getName();
+                HistoryController.addHistory(db, new Transaction(0, Transaction.TYPE_ADDED, details, UtilMethods.getCurrentDate()));
             }
 
             db.setTransactionSuccessful();

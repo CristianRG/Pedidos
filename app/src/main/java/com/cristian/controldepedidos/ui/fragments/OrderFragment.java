@@ -7,20 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cristian.controldepedidos.R;
 import com.cristian.controldepedidos.controller.adapters.OrderAdapter;
-import com.cristian.controldepedidos.controller.database.OrderController;
 import com.cristian.controldepedidos.controller.transactions.OrderTransaction;
-import com.cristian.controldepedidos.model.Article;
-import com.cristian.controldepedidos.model.Customer;
 import com.cristian.controldepedidos.model.DatabaseHelper;
 import com.cristian.controldepedidos.model.Order;
-import com.cristian.controldepedidos.model.Product;
 import com.cristian.controldepedidos.utils.QuickSort;
 
 import java.text.ParseException;
@@ -57,7 +51,7 @@ public class OrderFragment extends Fragment {
         orderList = new ArrayList<>();
         orderList = OrderTransaction.getOrdersTransaction(dbh);
         try {
-            QuickSort.quickSort(orderList, 0, orderList.size() - 1);
+            QuickSort.orderQuickSort(orderList, 0, orderList.size() - 1);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +66,7 @@ public class OrderFragment extends Fragment {
         super.onResume();
         orderList = OrderTransaction.getOrdersTransaction(dbh);
         try {
-            QuickSort.quickSort(orderList, 0, orderList.size() - 1);
+            QuickSort.orderQuickSort(orderList, 0, orderList.size() - 1);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }

@@ -8,6 +8,7 @@ public class ContractDB {
     public static final String ARTICLE_TABLE_NAME = "article";
     public static final String ORDER_TABLE_NAME = "orders";
     public static final String ORDER_ARTICLE_TABLE_NAME = "order_article";
+    public static final String HISTORY_TABLE_NAME = "history";
 
     // Column Names for Customer Table
     public static final String CUSTOMER_COLUMN_ID = "id";
@@ -42,4 +43,10 @@ public class ContractDB {
     public static final String ORDER_ARTICLE_COLUMN_ID = "id";
     public static final String ORDER_ARTICLE_COLUMN_ORDER_ID = "order_id";
     public static final String ORDER_ARTICLE_COLUMN_ARTICLE_ID = "article_id";
+    // Column Names for History_table
+    public static final String HISTORY_ID = "id";
+    public static final String HISTORY_TYPE = "type";
+    public static final String HISTORY_DETAILS = "details";
+    public static final String HISTORY_DATE = "date";
+
 }
